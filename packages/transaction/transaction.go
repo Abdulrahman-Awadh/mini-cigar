@@ -47,10 +47,10 @@ func (s *server) CreateTransaction(ctx context.Context, req *pb.CreateTransactio
 	return &pb.CreateTransactionResponse{IsSuccess: true, Id: transaction.Id.String()}, nil
 }
 
-//func (s *server) GetTransaction(ctx context.Context, in *pb.GetTransactionRequest, opts ...grpc.CallOption) (*pb.GetTransactionResponse, error) {
-//	return nil, nil
-//}
-//
-//func (s *server) StreamTransactions(ctx context.Context, in *pb.StreamTransactionsRequest, opts ...grpc.CallOption) (pb.TransactionService_StreamTransactionsClient, error) {
-//	return nil, nil
-//}
+func (s *server) GetTransaction(ctx context.Context, in *pb.GetTransactionRequest, opts ...grpc.CallOption) (*pb.GetTransactionResponse, error) {
+	return nil, nil
+}
+
+func (s *server) StreamTransactions(ctx context.Context, in *pb.StreamTransactionsRequest, opts ...grpc.CallOption) (pb.TransactionService_StreamTransactionsClient, error) {
+	return nil, nil
+}

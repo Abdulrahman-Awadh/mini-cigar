@@ -30,10 +30,6 @@ type store struct {
 	DB database.Database
 }
 
-type TransactionStore struct {
-	database.Database
-}
-
 func NewTransactionStore(db database.Database) Store {
 	return &store{DB: db}
 }
@@ -115,10 +111,11 @@ func (s store) GetAllTransactions(ctx context.Context) ([]*Transaction, error) {
 	if err != nil {
 		return nil, err
 	}
-
+	defer rows.Close()
 	var transactions []*Transaction
+
 	for rows.Next() {
-		var transaction Transaction
+		transaction := &Transaction{}
 		err := rows.Scan(
 			&transaction.Id,
 			&transaction.CreatedAt,
@@ -127,12 +124,15 @@ func (s store) GetAllTransactions(ctx context.Context) ([]*Transaction, error) {
 			&transaction.Quantity,
 			&transaction.TotalPrice,
 		)
+		transactions = append(transactions, transaction)
 		if err != nil {
+			if errors.Is(err, pgx.ErrNoRows) {
+				return nil, nil
+			}
 			return nil, err
 		}
-		transactions = append(transactions, &transaction)
-	}
 
+	}
 	if err := rows.Err(); err != nil {
 		return nil, err
 	}
