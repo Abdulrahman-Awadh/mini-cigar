@@ -26,6 +26,7 @@ type Store interface {
 	GetTransactionById(ctx context.Context, id uuid.UUID) *Transaction
 	GetAllTransactions(ctx context.Context) ([]*Transaction, error)
 }
+
 type store struct {
 	DB database.Database
 }
@@ -33,10 +34,11 @@ type store struct {
 func NewTransactionStore(db database.Database) Store {
 	return &store{DB: db}
 }
-func (s store) InsertTransaction(ctx context.Context, transaction Transaction) (*Transaction, error) {
-	log.Println("Creating new Transaction...")
 
-	createdAt := time.Now()
+func (s store) InsertTransaction(ctx context.Context, transaction Transaction) (*Transaction, error) {
+	log.Println("Store: Creating new Transaction...")
+
+	createdAt := time.Now().UTC()
 	id := uuid.New()
 
 	insertSql := `INSERT INTO transaction (
@@ -64,6 +66,7 @@ func (s store) InsertTransaction(ctx context.Context, transaction Transaction) (
 	}, nil
 
 }
+
 func (s store) GetTransactionById(ctx context.Context, id uuid.UUID) *Transaction {
 
 	q := `SELECT 
@@ -97,6 +100,7 @@ func (s store) GetTransactionById(ctx context.Context, id uuid.UUID) *Transactio
 
 	return transaction
 }
+
 func (s store) GetAllTransactions(ctx context.Context) ([]*Transaction, error) {
 	q := `SELECT 
             id,
@@ -105,7 +109,7 @@ func (s store) GetAllTransactions(ctx context.Context) ([]*Transaction, error) {
             product_id,
             quantity,
             total_price 
-        FROM transaction`
+        FROM transaction order by created_at`
 
 	rows, err := s.DB.Query(ctx, q)
 	if err != nil {
@@ -131,7 +135,6 @@ func (s store) GetAllTransactions(ctx context.Context) ([]*Transaction, error) {
 			}
 			return nil, err
 		}
-
 	}
 	if err := rows.Err(); err != nil {
 		return nil, err
