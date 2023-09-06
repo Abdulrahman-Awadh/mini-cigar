@@ -36,7 +36,7 @@ func NewTransactionStore(db database.Database) Store {
 }
 
 func (s store) InsertTransaction(ctx context.Context, transaction Transaction) (*Transaction, error) {
-	log.Println("Creating new Transaction...")
+	log.Println("Store: Creating new Transaction...")
 
 	createdAt := time.Now().UTC()
 	id := uuid.New()
@@ -109,7 +109,7 @@ func (s store) GetAllTransactions(ctx context.Context) ([]*Transaction, error) {
             product_id,
             quantity,
             total_price 
-        FROM transaction`
+        FROM transaction order by created_at`
 
 	rows, err := s.DB.Query(ctx, q)
 	if err != nil {
