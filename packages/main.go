@@ -2,8 +2,8 @@ package main
 
 import (
 	"ecommerece/packages/database"
-	"ecommerece/packages/transaction"
 	"ecommerece/packages/transaction/store"
+	"ecommerece/packages/transaction/v1"
 	"fmt"
 	"golang.org/x/net/context"
 	"log"
@@ -18,10 +18,10 @@ func main() {
 		return
 	}
 	tx, err := conn.Begin(context.Background())
-	defer conn.Pool.Close()
+	defer conn.Close(context.Background())
 
-	transactionStore := store.NewTransactionStore(tx)
-	transactionService := transaction.NewTransactionService(transactionStore)
+	transactionStore := store.NewTransactionStore(tx.Conn())
+	transactionService := v1.NewTransactionService(transactionStore)
 	print(transactionService)
 
 }
