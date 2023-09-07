@@ -186,7 +186,7 @@ func (suite *StoreTestSuite) TestTransactionStore_GetAllTransaction_SUCCESS() {
 		funcOutputs = append(funcOutputs, funcOutput)
 	}
 
-	databaseOutputs, err := suite.store.GetAllTransactions(context.Background())
+	databaseOutputs, err := suite.store.GetAllTransaction(context.Background())
 	suite.NoError(err)
 	suite.NotNil(funcOutputs)
 	suite.NotNil(databaseOutputs)
@@ -207,7 +207,7 @@ func (suite *StoreTestSuite) TestTransactionStore_GetAllTransaction_SUCCESS() {
 }
 
 func (suite *StoreTestSuite) TestTransactionStore_GetAllTransaction_NoRecord() {
-	result, err := suite.store.GetAllTransactions(context.Background())
+	result, err := suite.store.GetAllTransaction(context.Background())
 
 	suite.NoError(err)
 	suite.Nil(result)
