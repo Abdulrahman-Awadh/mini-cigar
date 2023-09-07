@@ -24,7 +24,7 @@ type Transaction struct {
 type Store interface {
 	InsertTransaction(ctx context.Context, transaction Transaction) (*Transaction, error)
 	GetTransactionById(ctx context.Context, id uuid.UUID) *Transaction
-	GetAllTransactions(ctx context.Context) ([]*Transaction, error)
+	GetAllTransaction(ctx context.Context) ([]*Transaction, error)
 }
 
 type store struct {
@@ -101,7 +101,7 @@ func (s store) GetTransactionById(ctx context.Context, id uuid.UUID) *Transactio
 	return transaction
 }
 
-func (s store) GetAllTransactions(ctx context.Context) ([]*Transaction, error) {
+func (s store) GetAllTransaction(ctx context.Context) ([]*Transaction, error) {
 	q := `SELECT 
             id,
             created_at,

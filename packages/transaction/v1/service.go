@@ -78,9 +78,31 @@ func (s *server) GetTransaction(ctx context.Context, req *pb.GetTransactionReque
 
 }
 func (s *server) StreamTransactions(*pb.StreamTransactionsRequest, pb.TransactionService_StreamTransactionsServer) error {
+	//todo later
 	return nil
 
 }
-func (s *server) GetAllTransactions(context.Context, *pb.GetTransactionRequest) (*pb.GetTransactionResponse, error) {
-	return nil, nil
+func (s *server) GetAllTransactions(ctx context.Context, req *pb.GetTransactionRequest) (*pb.GetAllTransactionsResponse, error) {
+	transactions, err := s.GetAllTransaction(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	if transactions == nil {
+		return nil, errors.New("no transaction found")
+	}
+
+	transactionsList := []*pb.Transaction{}
+	for _, transaction := range transactions {
+		transactionsList = append(transactionsList, &pb.Transaction{
+			Id:         transaction.Id.String(),
+			CreatedAt:  timestamppb.New(transaction.CreatedAt),
+			CustomerId: transaction.CustomerId.String(),
+			ProductId:  transaction.ProductId.String(),
+			Quantity:   transaction.Quantity,
+			TotalPrice: transaction.TotalPrice,
+		})
+	}
+
+	return &pb.GetAllTransactionsResponse{Transaction: transactionsList}, nil
 }
