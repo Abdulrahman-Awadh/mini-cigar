@@ -7,6 +7,7 @@ import (
 	"errors"
 	"github.com/google/uuid"
 	_ "google.golang.org/grpc"
+	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
 type server struct {
@@ -54,8 +55,26 @@ func (s *server) CreateTransaction(ctx context.Context, req *pb.CreateTransactio
 	}, nil
 
 }
-func (s *server) GetTransaction(context.Context, *pb.GetTransactionRequest) (*pb.GetTransactionResponse, error) {
-	return nil, nil
+
+func (s *server) GetTransaction(ctx context.Context, req *pb.GetTransactionRequest) (*pb.GetTransactionResponse, error) {
+	id, err := uuid.Parse(req.Id)
+	if err != nil {
+		return nil, errors.New("invalid transaction id")
+	}
+
+	transaction := s.GetTransactionById(ctx, id)
+	if transaction == nil {
+		return nil, errors.New("no transaction found")
+	}
+
+	return &pb.GetTransactionResponse{Transaction: &pb.Transaction{
+		Id:         transaction.Id.String(),
+		CreatedAt:  timestamppb.New(transaction.CreatedAt),
+		CustomerId: transaction.CustomerId.String(),
+		ProductId:  transaction.ProductId.String(),
+		Quantity:   transaction.Quantity,
+		TotalPrice: transaction.TotalPrice,
+	}}, nil
 
 }
 func (s *server) StreamTransactions(*pb.StreamTransactionsRequest, pb.TransactionService_StreamTransactionsServer) error {
