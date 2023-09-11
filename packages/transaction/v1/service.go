@@ -4,37 +4,42 @@ import (
 	"context"
 	pb "ecommerece/packages/proto/transaction"
 	"ecommerece/packages/transaction/store"
-	"errors"
 	"github.com/google/uuid"
-	_ "google.golang.org/grpc"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
+
+	//_ "google.golang.org/grpc"
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
 type server struct {
-	store.Store
+	store store.Store
+	pb.UnimplementedTransactionServiceServer
 }
 
-func NewTransactionService(store store.Store) *server {
-	return &server{store}
+func NewTransactionService(store store.Store) pb.TransactionServiceServer {
+	return &server{
+		store: store,
+	}
 }
 
 func (s *server) CreateTransaction(ctx context.Context, req *pb.CreateTransactionRequest) (*pb.CreateTransactionResponse, error) {
 	customerId, err := uuid.Parse(req.CustomerId)
 	if err != nil {
-		return nil, errors.New("invalid customer id")
+		return nil, status.Error(codes.InvalidArgument, "invalid customer id")
 	}
 
-	productId, err := uuid.Parse(req.CustomerId)
+	productId, err := uuid.Parse(req.ProductId)
 	if err != nil {
-		return nil, errors.New("invalid product id")
+		return nil, status.Error(codes.InvalidArgument, "invalid product id")
 	}
 
 	if !(req.Quantity > 0) {
-		return nil, errors.New("invalid quantity value")
+		return nil, status.Error(codes.InvalidArgument, "invalid quantity value")
 	}
 
 	if !(req.TotalPrice > 0) {
-		return nil, errors.New("invalid total price value")
+		return nil, status.Error(codes.InvalidArgument, "invalid total price value")
 	}
 
 	transaction := store.Transaction{
@@ -44,30 +49,33 @@ func (s *server) CreateTransaction(ctx context.Context, req *pb.CreateTransactio
 		TotalPrice: req.TotalPrice,
 	}
 
-	result, err := s.InsertTransaction(ctx, transaction)
+	result, err := s.store.InsertTransaction(ctx, transaction)
 	if err != nil {
-		return nil, errors.New("unable to add the transaction")
+		return nil, status.Error(codes.Internal, "Ops")
 	}
 
 	return &pb.CreateTransactionResponse{
 		Id:        result.Id.String(),
 		IsSuccess: true,
 	}, nil
-
 }
 
-func (s *server) GetTransaction(ctx context.Context, req *pb.GetTransactionRequest) (*pb.GetTransactionResponse, error) {
+func (s *server) GetTransactionById(ctx context.Context, req *pb.GetTransactionByIdRequest) (*pb.GetTransactionByIdResponse, error) {
 	id, err := uuid.Parse(req.Id)
 	if err != nil {
-		return nil, errors.New("invalid transaction id")
+		return nil, status.Error(codes.InvalidArgument, "invalid transaction id")
+
 	}
 
-	transaction := s.GetTransactionById(ctx, id)
-	if transaction == nil {
-		return nil, errors.New("no transaction found")
+	transaction, err := s.store.GetTransactionById(ctx, id)
+	if err != nil {
+		return nil, status.Error(codes.Internal, "")
+	}
+	if transaction == nil && err == nil {
+		return nil, status.Error(codes.NotFound, "no record")
 	}
 
-	return &pb.GetTransactionResponse{Transaction: &pb.Transaction{
+	return &pb.GetTransactionByIdResponse{Transaction: &pb.Transaction{
 		Id:         transaction.Id.String(),
 		CreatedAt:  timestamppb.New(transaction.CreatedAt),
 		CustomerId: transaction.CustomerId.String(),
@@ -77,22 +85,24 @@ func (s *server) GetTransaction(ctx context.Context, req *pb.GetTransactionReque
 	}}, nil
 
 }
+
 func (s *server) StreamTransactions(*pb.StreamTransactionsRequest, pb.TransactionService_StreamTransactionsServer) error {
 	//todo later
 	return nil
 
 }
-func (s *server) GetAllTransactions(ctx context.Context, req *pb.GetTransactionRequest) (*pb.GetAllTransactionsResponse, error) {
-	transactions, err := s.GetAllTransaction(ctx)
+
+func (s *server) GetAllTransactions(ctx context.Context, req *pb.GetAllTransactionsRequest) (*pb.GetAllTransactionsResponse, error) {
+	transactions, err := s.store.GetAllTransaction(ctx)
 	if err != nil {
-		return nil, err
+		return nil, status.Error(codes.Internal, "Ops")
 	}
 
 	if transactions == nil {
-		return nil, errors.New("no transaction found")
+		return nil, status.Error(codes.NotFound, "no transaction found")
 	}
 
-	transactionsList := []*pb.Transaction{}
+	var transactionsList []*pb.Transaction
 	for _, transaction := range transactions {
 		transactionsList = append(transactionsList, &pb.Transaction{
 			Id:         transaction.Id.String(),
@@ -104,5 +114,7 @@ func (s *server) GetAllTransactions(ctx context.Context, req *pb.GetTransactionR
 		})
 	}
 
-	return &pb.GetAllTransactionsResponse{Transaction: transactionsList}, nil
+	return &pb.GetAllTransactionsResponse{
+		Transaction: transactionsList,
+	}, nil
 }

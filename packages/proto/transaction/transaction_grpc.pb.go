@@ -20,7 +20,7 @@ const _ = grpc.SupportPackageIsVersion7
 
 const (
 	TransactionService_CreateTransaction_FullMethodName  = "/TransactionService/CreateTransaction"
-	TransactionService_GetTransaction_FullMethodName     = "/TransactionService/GetTransaction"
+	TransactionService_GetTransactionById_FullMethodName = "/TransactionService/GetTransactionById"
 	TransactionService_StreamTransactions_FullMethodName = "/TransactionService/StreamTransactions"
 	TransactionService_GetAllTransactions_FullMethodName = "/TransactionService/GetAllTransactions"
 )
@@ -30,9 +30,9 @@ const (
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type TransactionServiceClient interface {
 	CreateTransaction(ctx context.Context, in *CreateTransactionRequest, opts ...grpc.CallOption) (*CreateTransactionResponse, error)
-	GetTransaction(ctx context.Context, in *GetTransactionRequest, opts ...grpc.CallOption) (*GetTransactionResponse, error)
+	GetTransactionById(ctx context.Context, in *GetTransactionByIdRequest, opts ...grpc.CallOption) (*GetTransactionByIdResponse, error)
 	StreamTransactions(ctx context.Context, in *StreamTransactionsRequest, opts ...grpc.CallOption) (TransactionService_StreamTransactionsClient, error)
-	GetAllTransactions(ctx context.Context, in *GetTransactionRequest, opts ...grpc.CallOption) (*GetTransactionResponse, error)
+	GetAllTransactions(ctx context.Context, in *GetAllTransactionsRequest, opts ...grpc.CallOption) (*GetAllTransactionsResponse, error)
 }
 
 type transactionServiceClient struct {
@@ -52,9 +52,9 @@ func (c *transactionServiceClient) CreateTransaction(ctx context.Context, in *Cr
 	return out, nil
 }
 
-func (c *transactionServiceClient) GetTransaction(ctx context.Context, in *GetTransactionRequest, opts ...grpc.CallOption) (*GetTransactionResponse, error) {
-	out := new(GetTransactionResponse)
-	err := c.cc.Invoke(ctx, TransactionService_GetTransaction_FullMethodName, in, out, opts...)
+func (c *transactionServiceClient) GetTransactionById(ctx context.Context, in *GetTransactionByIdRequest, opts ...grpc.CallOption) (*GetTransactionByIdResponse, error) {
+	out := new(GetTransactionByIdResponse)
+	err := c.cc.Invoke(ctx, TransactionService_GetTransactionById_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -93,8 +93,8 @@ func (x *transactionServiceStreamTransactionsClient) Recv() (*StreamTransactions
 	return m, nil
 }
 
-func (c *transactionServiceClient) GetAllTransactions(ctx context.Context, in *GetTransactionRequest, opts ...grpc.CallOption) (*GetTransactionResponse, error) {
-	out := new(GetTransactionResponse)
+func (c *transactionServiceClient) GetAllTransactions(ctx context.Context, in *GetAllTransactionsRequest, opts ...grpc.CallOption) (*GetAllTransactionsResponse, error) {
+	out := new(GetAllTransactionsResponse)
 	err := c.cc.Invoke(ctx, TransactionService_GetAllTransactions_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -107,9 +107,9 @@ func (c *transactionServiceClient) GetAllTransactions(ctx context.Context, in *G
 // for forward compatibility
 type TransactionServiceServer interface {
 	CreateTransaction(context.Context, *CreateTransactionRequest) (*CreateTransactionResponse, error)
-	GetTransaction(context.Context, *GetTransactionRequest) (*GetTransactionResponse, error)
+	GetTransactionById(context.Context, *GetTransactionByIdRequest) (*GetTransactionByIdResponse, error)
 	StreamTransactions(*StreamTransactionsRequest, TransactionService_StreamTransactionsServer) error
-	GetAllTransactions(context.Context, *GetTransactionRequest) (*GetTransactionResponse, error)
+	GetAllTransactions(context.Context, *GetAllTransactionsRequest) (*GetAllTransactionsResponse, error)
 	mustEmbedUnimplementedTransactionServiceServer()
 }
 
@@ -120,13 +120,13 @@ type UnimplementedTransactionServiceServer struct {
 func (UnimplementedTransactionServiceServer) CreateTransaction(context.Context, *CreateTransactionRequest) (*CreateTransactionResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateTransaction not implemented")
 }
-func (UnimplementedTransactionServiceServer) GetTransaction(context.Context, *GetTransactionRequest) (*GetTransactionResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetTransaction not implemented")
+func (UnimplementedTransactionServiceServer) GetTransactionById(context.Context, *GetTransactionByIdRequest) (*GetTransactionByIdResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetTransactionById not implemented")
 }
 func (UnimplementedTransactionServiceServer) StreamTransactions(*StreamTransactionsRequest, TransactionService_StreamTransactionsServer) error {
 	return status.Errorf(codes.Unimplemented, "method StreamTransactions not implemented")
 }
-func (UnimplementedTransactionServiceServer) GetAllTransactions(context.Context, *GetTransactionRequest) (*GetTransactionResponse, error) {
+func (UnimplementedTransactionServiceServer) GetAllTransactions(context.Context, *GetAllTransactionsRequest) (*GetAllTransactionsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetAllTransactions not implemented")
 }
 func (UnimplementedTransactionServiceServer) mustEmbedUnimplementedTransactionServiceServer() {}
@@ -160,20 +160,20 @@ func _TransactionService_CreateTransaction_Handler(srv interface{}, ctx context.
 	return interceptor(ctx, in, info, handler)
 }
 
-func _TransactionService_GetTransaction_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetTransactionRequest)
+func _TransactionService_GetTransactionById_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetTransactionByIdRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(TransactionServiceServer).GetTransaction(ctx, in)
+		return srv.(TransactionServiceServer).GetTransactionById(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: TransactionService_GetTransaction_FullMethodName,
+		FullMethod: TransactionService_GetTransactionById_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(TransactionServiceServer).GetTransaction(ctx, req.(*GetTransactionRequest))
+		return srv.(TransactionServiceServer).GetTransactionById(ctx, req.(*GetTransactionByIdRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -200,7 +200,7 @@ func (x *transactionServiceStreamTransactionsServer) Send(m *StreamTransactionsR
 }
 
 func _TransactionService_GetAllTransactions_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetTransactionRequest)
+	in := new(GetAllTransactionsRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -212,7 +212,7 @@ func _TransactionService_GetAllTransactions_Handler(srv interface{}, ctx context
 		FullMethod: TransactionService_GetAllTransactions_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(TransactionServiceServer).GetAllTransactions(ctx, req.(*GetTransactionRequest))
+		return srv.(TransactionServiceServer).GetAllTransactions(ctx, req.(*GetAllTransactionsRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -229,8 +229,8 @@ var TransactionService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _TransactionService_CreateTransaction_Handler,
 		},
 		{
-			MethodName: "GetTransaction",
-			Handler:    _TransactionService_GetTransaction_Handler,
+			MethodName: "GetTransactionById",
+			Handler:    _TransactionService_GetTransactionById_Handler,
 		},
 		{
 			MethodName: "GetAllTransactions",

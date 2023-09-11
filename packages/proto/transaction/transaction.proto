@@ -25,11 +25,11 @@ bool is_success = 1;
 string id = 2 ;
 }
 
-message GetTransactionRequest{
+message GetTransactionByIdRequest{
 string id=1 ;
 }
 
-message GetTransactionResponse{
+message GetTransactionByIdResponse{
   Transaction transaction=1;
 }
 
@@ -49,7 +49,7 @@ message GetAllTransactionsResponse{
 
 service TransactionService{
 rpc CreateTransaction (CreateTransactionRequest) returns (CreateTransactionResponse);
-rpc GetTransaction (GetTransactionRequest) returns (GetTransactionResponse);
+rpc GetTransactionById (GetTransactionByIdRequest) returns (GetTransactionByIdResponse);
 rpc StreamTransactions (StreamTransactionsRequest) returns (stream StreamTransactionsResponse);
-rpc GetAllTransactions (GetTransactionRequest) returns (GetTransactionResponse);
+rpc GetAllTransactions (GetAllTransactionsRequest) returns (GetAllTransactionsResponse);
 }
