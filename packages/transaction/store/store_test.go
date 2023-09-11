@@ -95,7 +95,8 @@ func (suite *StoreTestSuite) TestTransactionStore_InsertTransaction_SUCCESS() {
 	resultTransaction, err := suite.store.InsertTransaction(ctx, inputTransaction)
 	log.Println(resultTransaction.Id)
 
-	databaseTransaction := suite.store.GetTransactionById(ctx, resultTransaction.Id)
+	databaseTransaction, err := suite.store.GetTransactionById(ctx, resultTransaction.Id)
+	suite.NoError(err)
 	log.Println(resultTransaction.Id)
 
 	suite.Nil(err)
@@ -143,7 +144,8 @@ func (suite *StoreTestSuite) TestTransactionStore_GetTransactionById_SUCCESS() {
 	suite.NoError(err)
 
 	//get the Id in order to use it in GetTransactionById
-	databaseOutput := suite.store.GetTransactionById(context.Background(), funcOutput.Id)
+	databaseOutput, err := suite.store.GetTransactionById(context.Background(), funcOutput.Id)
+	suite.NoError(err)
 
 	suite.NotNil(funcOutput)
 	suite.NotNil(databaseOutput)
@@ -157,8 +159,9 @@ func (suite *StoreTestSuite) TestTransactionStore_GetTransactionById_SUCCESS() {
 	suite.Equal(funcOutput.TotalPrice, databaseOutput.TotalPrice)
 }
 
-func (suite *StoreTestSuite) TestTransactionStore_GetTransactionById_NoRecord() {
-	databaseOutput := suite.store.GetTransactionById(context.Background(), uuid.New())
+func (suite *StoreTestSuite) TestTransactionStore_GetTransactionById_Error_NoRecord() {
+	databaseOutput, err := suite.store.GetTransactionById(context.Background(), uuid.New())
+	suite.NoError(err)
 	suite.Nil(databaseOutput)
 }
 
@@ -186,7 +189,7 @@ func (suite *StoreTestSuite) TestTransactionStore_GetAllTransaction_SUCCESS() {
 		funcOutputs = append(funcOutputs, funcOutput)
 	}
 
-	databaseOutputs, err := suite.store.GetAllTransactions(context.Background())
+	databaseOutputs, err := suite.store.GetAllTransaction(context.Background())
 	suite.NoError(err)
 	suite.NotNil(funcOutputs)
 	suite.NotNil(databaseOutputs)
@@ -206,8 +209,8 @@ func (suite *StoreTestSuite) TestTransactionStore_GetAllTransaction_SUCCESS() {
 
 }
 
-func (suite *StoreTestSuite) TestTransactionStore_GetAllTransaction_NoRecord() {
-	result, err := suite.store.GetAllTransactions(context.Background())
+func (suite *StoreTestSuite) TestTransactionStore_GetAllTransaction_Error_NoRecord() {
+	result, err := suite.store.GetAllTransaction(context.Background())
 
 	suite.NoError(err)
 	suite.Nil(result)

@@ -23,8 +23,8 @@ type Transaction struct {
 
 type Store interface {
 	InsertTransaction(ctx context.Context, transaction Transaction) (*Transaction, error)
-	GetTransactionById(ctx context.Context, id uuid.UUID) *Transaction
-	GetAllTransactions(ctx context.Context) ([]*Transaction, error)
+	GetTransactionById(ctx context.Context, id uuid.UUID) (*Transaction, error)
+	GetAllTransaction(ctx context.Context) ([]*Transaction, error)
 }
 
 type store struct {
@@ -40,7 +40,6 @@ func (s store) InsertTransaction(ctx context.Context, transaction Transaction) (
 
 	createdAt := time.Now().UTC()
 	id := uuid.New()
-
 	insertSql := `INSERT INTO transaction (
 			id,
 			created_at,
@@ -67,7 +66,7 @@ func (s store) InsertTransaction(ctx context.Context, transaction Transaction) (
 
 }
 
-func (s store) GetTransactionById(ctx context.Context, id uuid.UUID) *Transaction {
+func (s store) GetTransactionById(ctx context.Context, id uuid.UUID) (*Transaction, error) {
 
 	q := `SELECT 
 			id,
@@ -93,15 +92,15 @@ func (s store) GetTransactionById(ctx context.Context, id uuid.UUID) *Transactio
 
 	if err != nil {
 		if errors.Is(err, pgx.ErrNoRows) {
-			return nil
+			return nil, nil
 		}
-		return nil
+		return nil, err
 	}
 
-	return transaction
+	return transaction, nil
 }
 
-func (s store) GetAllTransactions(ctx context.Context) ([]*Transaction, error) {
+func (s store) GetAllTransaction(ctx context.Context) ([]*Transaction, error) {
 	q := `SELECT 
             id,
             created_at,

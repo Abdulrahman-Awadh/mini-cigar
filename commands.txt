@@ -12,3 +12,8 @@ cockroach start \
 --background
 
 
+mock store
+mockery --dir=packages/transaction/store --name=Store --filename=store_mock.go --output=packages/transaction/store/mock --outpkg=store_mock
+
+mockery --dir=packages/transaction/store --output=/transaction/store/mock --outpkg=store_mock --all
+
