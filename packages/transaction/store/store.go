@@ -25,6 +25,9 @@ type Store interface {
 	InsertTransaction(ctx context.Context, transaction Transaction) (*Transaction, error)
 	GetTransactionById(ctx context.Context, id uuid.UUID) (*Transaction, error)
 	GetAllTransaction(ctx context.Context) ([]*Transaction, error)
+	GetTotalSales(ctx context.Context) (float32, error)
+	GetSalesByProductId(ctx context.Context, productId uuid.UUID) (float32, error)
+	GetTopFiveCustomersId(ctx context.Context) ([]*uuid.UUID, error)
 }
 
 type store struct {
@@ -33,6 +36,38 @@ type store struct {
 
 func NewTransactionStore(db database.Database) Store {
 	return &store{DB: db}
+}
+
+func (s store) GetTotalSales(ctx context.Context) (float32, error) {
+	totalPrice := 0
+	q := `
+		SELECT SUM(total_price)
+		FROM "transaction"
+		`
+	row := s.DB.QueryRow(ctx, q)
+
+	err := row.Scan(
+		&totalPrice,
+	)
+
+	if err != nil {
+		if errors.Is(err, pgx.ErrNoRows) {
+			return 0, nil
+		}
+		return 0, err
+	}
+
+	return 0, nil
+}
+
+func (s store) GetSalesByProductId(ctx context.Context, productId uuid.UUID) (float32, error) {
+	//TODO implement me
+	panic("implement me")
+}
+
+func (s store) GetTopFiveCustomersId(ctx context.Context) ([]*uuid.UUID, error) {
+	//TODO implement me
+	panic("implement me")
 }
 
 func (s store) InsertTransaction(ctx context.Context, transaction Transaction) (*Transaction, error) {
