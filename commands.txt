@@ -1,6 +1,7 @@
 
 Create Proto:
 protoc --proto_path=. transaction.proto --go_out=. --go-grpc_out=.
+protoc --proto_path=. analytics.proto --go_out=. --go-grpc_out=.
 
 Running the database:
 cockroach start \
