@@ -1,41 +1,52 @@
 package main
 
 import (
+	"context"
+	analyticssvc "ecommerece/packages/analytics/v1"
 	"ecommerece/packages/database"
+	analyticspb "ecommerece/packages/proto/analytics"
 	pb "ecommerece/packages/proto/transaction"
+	"google.golang.org/grpc"
+	"net"
+
 	"ecommerece/packages/transaction/store"
 	"ecommerece/packages/transaction/v1"
 	"fmt"
-	"golang.org/x/net/context"
-	"google.golang.org/grpc"
 	"log"
-	"net"
 )
 
 func main() {
 	log.Print("main start")
-
+	//Database connection setup
 	conn, err := database.NewCockroachDB("postgresql://root@localhost:26257/ecommerece")
 	if err != nil {
 		fmt.Println("Error connecting to CockroachDB:", err)
 		return
 	}
-	tx, err := conn.Begin(context.Background())
 	defer conn.Close(context.Background())
 
-	transactionStore := store.NewTransactionStore(tx.Conn())
-	transactionService := v1.NewTransactionService(transactionStore)
-	print(transactionService)
+	grpcServer := grpc.NewServer()
 
-	listener, err := net.Listen("tcp", ":15935")
+	//initialize transaction service:
+	transactionStore := store.NewTransactionStore(conn)
+	transactionService := v1.NewTransactionService(transactionStore)
+	pb.RegisterTransactionServiceServer(grpcServer, transactionService)
+
+	//initialize analytics service:
+	analyticsService := analyticssvc.NewAnalyticsService(transactionService)
+	analyticspb.RegisterAnalyticsServiceServer(grpcServer, analyticsService)
+
+	lis, err := net.Listen("tcp", ":15935")
 	if err != nil {
-		panic(err)
+		log.Fatalln("Fail to listen")
 	}
 
-	s := grpc.NewServer()
-	pb.RegisterTransactionServiceServer(s, transactionService)
-	if err := s.Serve(listener); err != nil {
-		log.Fatalf("failed to serve: %v", err)
+	//to check the services registered in the grpc
+	log.Println(grpcServer.GetServiceInfo())
+	err = grpcServer.Serve(lis)
+
+	if err != nil {
+		log.Fatalln("Fail to serve")
 	}
 
 }
