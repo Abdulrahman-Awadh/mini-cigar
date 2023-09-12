@@ -19,10 +19,13 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	TransactionService_CreateTransaction_FullMethodName  = "/TransactionService/CreateTransaction"
-	TransactionService_GetTransactionById_FullMethodName = "/TransactionService/GetTransactionById"
-	TransactionService_StreamTransactions_FullMethodName = "/TransactionService/StreamTransactions"
-	TransactionService_GetAllTransactions_FullMethodName = "/TransactionService/GetAllTransactions"
+	TransactionService_CreateTransaction_FullMethodName     = "/TransactionService/CreateTransaction"
+	TransactionService_GetTransactionById_FullMethodName    = "/TransactionService/GetTransactionById"
+	TransactionService_StreamTransactions_FullMethodName    = "/TransactionService/StreamTransactions"
+	TransactionService_GetAllTransactions_FullMethodName    = "/TransactionService/GetAllTransactions"
+	TransactionService_GetTotalSales_FullMethodName         = "/TransactionService/GetTotalSales"
+	TransactionService_GetSalesByProductId_FullMethodName   = "/TransactionService/GetSalesByProductId"
+	TransactionService_GetTopFiveCustomersId_FullMethodName = "/TransactionService/GetTopFiveCustomersId"
 )
 
 // TransactionServiceClient is the client API for TransactionService service.
@@ -33,6 +36,9 @@ type TransactionServiceClient interface {
 	GetTransactionById(ctx context.Context, in *GetTransactionByIdRequest, opts ...grpc.CallOption) (*GetTransactionByIdResponse, error)
 	StreamTransactions(ctx context.Context, in *StreamTransactionsRequest, opts ...grpc.CallOption) (TransactionService_StreamTransactionsClient, error)
 	GetAllTransactions(ctx context.Context, in *GetAllTransactionsRequest, opts ...grpc.CallOption) (*GetAllTransactionsResponse, error)
+	GetTotalSales(ctx context.Context, in *GetTotalSalesRequest, opts ...grpc.CallOption) (*GetTotalSalesResponse, error)
+	GetSalesByProductId(ctx context.Context, in *GetSalesByProductIdRequest, opts ...grpc.CallOption) (*GetSalesByProductIdResponse, error)
+	GetTopFiveCustomersId(ctx context.Context, in *GetTopFiveCustomersIdRequest, opts ...grpc.CallOption) (*GetTopFiveCustomersIdResponse, error)
 }
 
 type transactionServiceClient struct {
@@ -102,6 +108,33 @@ func (c *transactionServiceClient) GetAllTransactions(ctx context.Context, in *G
 	return out, nil
 }
 
+func (c *transactionServiceClient) GetTotalSales(ctx context.Context, in *GetTotalSalesRequest, opts ...grpc.CallOption) (*GetTotalSalesResponse, error) {
+	out := new(GetTotalSalesResponse)
+	err := c.cc.Invoke(ctx, TransactionService_GetTotalSales_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *transactionServiceClient) GetSalesByProductId(ctx context.Context, in *GetSalesByProductIdRequest, opts ...grpc.CallOption) (*GetSalesByProductIdResponse, error) {
+	out := new(GetSalesByProductIdResponse)
+	err := c.cc.Invoke(ctx, TransactionService_GetSalesByProductId_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *transactionServiceClient) GetTopFiveCustomersId(ctx context.Context, in *GetTopFiveCustomersIdRequest, opts ...grpc.CallOption) (*GetTopFiveCustomersIdResponse, error) {
+	out := new(GetTopFiveCustomersIdResponse)
+	err := c.cc.Invoke(ctx, TransactionService_GetTopFiveCustomersId_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // TransactionServiceServer is the server API for TransactionService service.
 // All implementations must embed UnimplementedTransactionServiceServer
 // for forward compatibility
@@ -110,6 +143,9 @@ type TransactionServiceServer interface {
 	GetTransactionById(context.Context, *GetTransactionByIdRequest) (*GetTransactionByIdResponse, error)
 	StreamTransactions(*StreamTransactionsRequest, TransactionService_StreamTransactionsServer) error
 	GetAllTransactions(context.Context, *GetAllTransactionsRequest) (*GetAllTransactionsResponse, error)
+	GetTotalSales(context.Context, *GetTotalSalesRequest) (*GetTotalSalesResponse, error)
+	GetSalesByProductId(context.Context, *GetSalesByProductIdRequest) (*GetSalesByProductIdResponse, error)
+	GetTopFiveCustomersId(context.Context, *GetTopFiveCustomersIdRequest) (*GetTopFiveCustomersIdResponse, error)
 	mustEmbedUnimplementedTransactionServiceServer()
 }
 
@@ -128,6 +164,15 @@ func (UnimplementedTransactionServiceServer) StreamTransactions(*StreamTransacti
 }
 func (UnimplementedTransactionServiceServer) GetAllTransactions(context.Context, *GetAllTransactionsRequest) (*GetAllTransactionsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetAllTransactions not implemented")
+}
+func (UnimplementedTransactionServiceServer) GetTotalSales(context.Context, *GetTotalSalesRequest) (*GetTotalSalesResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetTotalSales not implemented")
+}
+func (UnimplementedTransactionServiceServer) GetSalesByProductId(context.Context, *GetSalesByProductIdRequest) (*GetSalesByProductIdResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetSalesByProductId not implemented")
+}
+func (UnimplementedTransactionServiceServer) GetTopFiveCustomersId(context.Context, *GetTopFiveCustomersIdRequest) (*GetTopFiveCustomersIdResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetTopFiveCustomersId not implemented")
 }
 func (UnimplementedTransactionServiceServer) mustEmbedUnimplementedTransactionServiceServer() {}
 
@@ -217,6 +262,60 @@ func _TransactionService_GetAllTransactions_Handler(srv interface{}, ctx context
 	return interceptor(ctx, in, info, handler)
 }
 
+func _TransactionService_GetTotalSales_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetTotalSalesRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(TransactionServiceServer).GetTotalSales(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: TransactionService_GetTotalSales_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(TransactionServiceServer).GetTotalSales(ctx, req.(*GetTotalSalesRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _TransactionService_GetSalesByProductId_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetSalesByProductIdRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(TransactionServiceServer).GetSalesByProductId(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: TransactionService_GetSalesByProductId_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(TransactionServiceServer).GetSalesByProductId(ctx, req.(*GetSalesByProductIdRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _TransactionService_GetTopFiveCustomersId_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetTopFiveCustomersIdRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(TransactionServiceServer).GetTopFiveCustomersId(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: TransactionService_GetTopFiveCustomersId_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(TransactionServiceServer).GetTopFiveCustomersId(ctx, req.(*GetTopFiveCustomersIdRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // TransactionService_ServiceDesc is the grpc.ServiceDesc for TransactionService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -235,6 +334,18 @@ var TransactionService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetAllTransactions",
 			Handler:    _TransactionService_GetAllTransactions_Handler,
+		},
+		{
+			MethodName: "GetTotalSales",
+			Handler:    _TransactionService_GetTotalSales_Handler,
+		},
+		{
+			MethodName: "GetSalesByProductId",
+			Handler:    _TransactionService_GetSalesByProductId_Handler,
+		},
+		{
+			MethodName: "GetTopFiveCustomersId",
+			Handler:    _TransactionService_GetTopFiveCustomersId_Handler,
 		},
 	},
 	Streams: []grpc.StreamDesc{
