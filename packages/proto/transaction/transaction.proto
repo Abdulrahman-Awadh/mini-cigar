@@ -47,9 +47,33 @@ message GetAllTransactionsResponse{
   repeated Transaction transaction =1;
 }
 
+message GetTotalSalesRequest{
+
+}
+message GetTotalSalesResponse{
+  float total_price =1;
+}
+
+message GetSalesByProductIdRequest{
+  string product_id = 1;
+}
+message GetSalesByProductIdResponse{
+  float total_price=1;
+}
+
+message GetTopFiveCustomersIdRequest{
+
+}
+message GetTopFiveCustomersIdResponse{
+  repeated string customer_id=1;
+}
+
 service TransactionService{
-rpc CreateTransaction (CreateTransactionRequest) returns (CreateTransactionResponse);
-rpc GetTransactionById (GetTransactionByIdRequest) returns (GetTransactionByIdResponse);
-rpc StreamTransactions (StreamTransactionsRequest) returns (stream StreamTransactionsResponse);
-rpc GetAllTransactions (GetAllTransactionsRequest) returns (GetAllTransactionsResponse);
+  rpc CreateTransaction (CreateTransactionRequest) returns (CreateTransactionResponse);
+  rpc GetTransactionById (GetTransactionByIdRequest) returns (GetTransactionByIdResponse);
+  rpc StreamTransactions (StreamTransactionsRequest) returns (stream StreamTransactionsResponse);
+  rpc GetAllTransactions (GetAllTransactionsRequest) returns (GetAllTransactionsResponse);
+  rpc GetTotalSales (GetTotalSalesRequest) returns (GetTotalSalesResponse);
+  rpc GetSalesByProductId (GetSalesByProductIdRequest) returns (GetSalesByProductIdResponse);
+  rpc GetTopFiveCustomersId (GetTopFiveCustomersIdRequest) returns (GetTopFiveCustomersIdResponse);
 }
