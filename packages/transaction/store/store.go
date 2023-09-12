@@ -25,8 +25,8 @@ type Store interface {
 	InsertTransaction(ctx context.Context, transaction Transaction) (*Transaction, error)
 	GetTransactionById(ctx context.Context, id uuid.UUID) (*Transaction, error)
 	GetAllTransaction(ctx context.Context) ([]*Transaction, error)
-	GetTotalSales(ctx context.Context) (float32, error)
-	GetSalesByProductId(ctx context.Context, productId uuid.UUID) (float32, error)
+	GetTotalSales(ctx context.Context) (*float32, error)
+	GetSalesByProductId(ctx context.Context, productId uuid.UUID) (*float32, error)
 	GetTopFiveCustomersId(ctx context.Context) ([]*uuid.UUID, error)
 }
 
@@ -38,8 +38,8 @@ func NewTransactionStore(db database.Database) Store {
 	return &store{DB: db}
 }
 
-func (s store) GetTotalSales(ctx context.Context) (float32, error) {
-	totalPrice := 0
+func (s store) GetTotalSales(ctx context.Context) (*float32, error) {
+	var totalPrice *float32
 	q := `
 		SELECT SUM(total_price)
 		FROM "transaction"
@@ -52,22 +52,76 @@ func (s store) GetTotalSales(ctx context.Context) (float32, error) {
 
 	if err != nil {
 		if errors.Is(err, pgx.ErrNoRows) {
-			return 0, nil
+			return nil, nil
 		}
-		return 0, err
+		return nil, err
 	}
 
-	return 0, nil
+	return nil, nil
 }
 
-func (s store) GetSalesByProductId(ctx context.Context, productId uuid.UUID) (float32, error) {
-	//TODO implement me
-	panic("implement me")
+func (s store) GetSalesByProductId(ctx context.Context, productId uuid.UUID) (*float32, error) {
+	var totalPrice *float32
+	q := `
+			SELECT SUM(total_price)
+			FROM "transaction"
+			WHERE product_id = $1;
+		`
+
+	row := s.DB.QueryRow(ctx, q, productId)
+	err := row.Scan(&totalPrice)
+	if err != nil {
+		if errors.Is(err, pgx.ErrNoRows) {
+			return nil, nil
+		}
+		return nil, err
+	}
+
+	return totalPrice, nil
 }
 
 func (s store) GetTopFiveCustomersId(ctx context.Context) ([]*uuid.UUID, error) {
-	//TODO implement me
-	panic("implement me")
+	var totalPrice float32
+	var customerId uuid.UUID
+	q := `
+			select
+				customer_id ,
+				SUM (total_price)
+			FROM
+				"transaction" 
+			GROUP BY
+				customer_id  
+			ORDER BY
+				SUM (total_price) DESC
+			limit 5;
+			`
+
+	rows, err := s.DB.Query(ctx, q)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var customerIds []*uuid.UUID
+
+	for rows.Next() {
+		err := rows.Scan(
+			&customerId,
+			&totalPrice,
+		)
+		customerIds = append(customerIds, &customerId)
+		if err != nil {
+			if errors.Is(err, pgx.ErrNoRows) {
+				return nil, nil
+			}
+			return nil, err
+		}
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+
+	return customerIds, nil
+
 }
 
 func (s store) InsertTransaction(ctx context.Context, transaction Transaction) (*Transaction, error) {
