@@ -218,6 +218,47 @@ func (suite *StoreTestSuite) TestTransactionStore_GetAllTransaction_Error_NoReco
 
 // =================================
 
+// =================================
+//todo: GetTotalSales test
+// =================================
+
+func (suite *StoreTestSuite) TestTransactionStore_GetTotalSales_SUCCESS() {
+	//todo insert record to db
+	inputTransaction := store.Transaction{
+		CustomerId: uuid.New(),
+		ProductId:  uuid.New(),
+		Quantity:   3,
+		TotalPrice: 30,
+	}
+	_, err := suite.store.InsertTransaction(context.Background(), inputTransaction)
+	suite.NoError(err)
+
+	_, err = suite.store.InsertTransaction(context.Background(), inputTransaction)
+	suite.NoError(err)
+
+	_, err = suite.store.InsertTransaction(context.Background(), inputTransaction)
+	suite.NoError(err)
+
+	result, err := suite.store.GetTotalSales(context.Background())
+	suite.NoError(err)
+	suite.NotNil(result)
+	suite.Equal(float32(90), *result)
+}
+
+// =================================
+
+// =================================
+//todo: GetSalesByProductId test
+// =================================
+
+// =================================
+
+// =================================
+//todo: GetTopFiveCustomersId test
+// =================================
+
+// =================================
+
 // this func to run the test suite
 func TestStoreTestSuite(t *testing.T) {
 	suite.Run(t, new(StoreTestSuite))

@@ -4,6 +4,7 @@ import (
 	"context"
 	pb "ecommerece/packages/proto/transaction"
 	"ecommerece/packages/transaction/store"
+	"fmt"
 	"github.com/google/uuid"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -17,10 +18,48 @@ type server struct {
 	pb.UnimplementedTransactionServiceServer
 }
 
-func NewTransactionService(store store.Store) pb.TransactionServiceServer {
-	return &server{
-		store: store,
+func (s *server) GetTotalSales(ctx context.Context, req *pb.GetTotalSalesRequest) (*pb.GetTotalSalesResponse, error) {
+	//TODO implement me
+	totalPrice, err := s.store.GetTotalSales(ctx)
+	if err != nil {
+		return nil, status.Error(codes.Internal, fmt.Sprintf("Error while getting total price from transaction store: %s", err))
 	}
+
+	return &pb.GetTotalSalesResponse{
+		TotalPrice: *totalPrice,
+	}, nil
+}
+
+func (s *server) GetSalesByProductId(ctx context.Context, req *pb.GetSalesByProductIdRequest) (*pb.GetSalesByProductIdResponse, error) {
+	productId, err := uuid.Parse(req.ProductId)
+	if err != nil {
+		return nil, status.Error(codes.InvalidArgument, "invalid customer id")
+	}
+
+	result, err := s.store.GetSalesByProductId(ctx, productId)
+	if err != nil {
+		return nil, status.Error(codes.Internal, fmt.Sprintf("Error while getting total price from transaction store: %s", err))
+	}
+
+	return &pb.GetSalesByProductIdResponse{
+		TotalPrice: *result,
+	}, nil
+}
+
+func (s *server) GetTopFiveCustomersId(ctx context.Context, request *pb.GetTopFiveCustomersIdRequest) (*pb.GetTopFiveCustomersIdResponse, error) {
+
+	result, err := s.store.GetTopFiveCustomersId(ctx)
+	if err != nil {
+		return nil, status.Error(codes.Internal, fmt.Sprintf("Error while getting total price from transaction store: %s", err))
+	}
+	var customers []string
+	for _, customerId := range result {
+		customers = append(customers, customerId.String())
+
+	}
+	return &pb.GetTopFiveCustomersIdResponse{
+		CustomerId: customers,
+	}, nil
 }
 
 func (s *server) CreateTransaction(ctx context.Context, req *pb.CreateTransactionRequest) (*pb.CreateTransactionResponse, error) {
@@ -117,4 +156,10 @@ func (s *server) GetAllTransactions(ctx context.Context, req *pb.GetAllTransacti
 	return &pb.GetAllTransactionsResponse{
 		Transaction: transactionsList,
 	}, nil
+}
+
+func NewTransactionService(store store.Store) pb.TransactionServiceServer {
+	return &server{
+		store: store,
+	}
 }

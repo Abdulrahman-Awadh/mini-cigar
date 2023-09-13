@@ -42,22 +42,19 @@ func (s store) GetTotalSales(ctx context.Context) (*float32, error) {
 	var totalPrice *float32
 	q := `
 		SELECT SUM(total_price)
-		FROM "transaction"
+		FROM transaction
 		`
 	row := s.DB.QueryRow(ctx, q)
-
 	err := row.Scan(
 		&totalPrice,
 	)
-
 	if err != nil {
 		if errors.Is(err, pgx.ErrNoRows) {
 			return nil, nil
 		}
 		return nil, err
 	}
-
-	return nil, nil
+	return totalPrice, nil
 }
 
 func (s store) GetSalesByProductId(ctx context.Context, productId uuid.UUID) (*float32, error) {
