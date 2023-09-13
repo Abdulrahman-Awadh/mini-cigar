@@ -19,18 +19,18 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	AnalyticsService_GetTotalSales_FullMethodName       = "/AnalyticsService/GetTotalSales"
-	AnalyticsService_GetSalesByProductId_FullMethodName = "/AnalyticsService/GetSalesByProductId"
-	AnalyticsService_GetTopFiveCustomers_FullMethodName = "/AnalyticsService/GetTopFiveCustomers"
+	AnalyticsService_BringTotalSales_FullMethodName       = "/AnalyticsService/BringTotalSales"
+	AnalyticsService_BringSalesByProductId_FullMethodName = "/AnalyticsService/BringSalesByProductId"
+	AnalyticsService_ListTopFiveCustomers_FullMethodName  = "/AnalyticsService/ListTopFiveCustomers"
 )
 
 // AnalyticsServiceClient is the client API for AnalyticsService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type AnalyticsServiceClient interface {
-	GetTotalSales(ctx context.Context, in *GetTotalSalesRequest, opts ...grpc.CallOption) (*GetTotalSalesResponse, error)
-	GetSalesByProductId(ctx context.Context, in *GetSalesByProductIdRequest, opts ...grpc.CallOption) (*GetSalesByProductIdResponse, error)
-	GetTopFiveCustomers(ctx context.Context, in *GetTopFiveCustomersRequest, opts ...grpc.CallOption) (*GetTopFiveCustomersResponse, error)
+	BringTotalSales(ctx context.Context, in *BringTotalSalesRequest, opts ...grpc.CallOption) (*BringTotalSalesResponse, error)
+	BringSalesByProductId(ctx context.Context, in *BringSalesByProductIdRequest, opts ...grpc.CallOption) (*BringSalesByProductIdResponse, error)
+	ListTopFiveCustomers(ctx context.Context, in *ListTopFiveCustomersRequest, opts ...grpc.CallOption) (*ListTopFiveCustomersResponse, error)
 }
 
 type analyticsServiceClient struct {
@@ -41,27 +41,27 @@ func NewAnalyticsServiceClient(cc grpc.ClientConnInterface) AnalyticsServiceClie
 	return &analyticsServiceClient{cc}
 }
 
-func (c *analyticsServiceClient) GetTotalSales(ctx context.Context, in *GetTotalSalesRequest, opts ...grpc.CallOption) (*GetTotalSalesResponse, error) {
-	out := new(GetTotalSalesResponse)
-	err := c.cc.Invoke(ctx, AnalyticsService_GetTotalSales_FullMethodName, in, out, opts...)
+func (c *analyticsServiceClient) BringTotalSales(ctx context.Context, in *BringTotalSalesRequest, opts ...grpc.CallOption) (*BringTotalSalesResponse, error) {
+	out := new(BringTotalSalesResponse)
+	err := c.cc.Invoke(ctx, AnalyticsService_BringTotalSales_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *analyticsServiceClient) GetSalesByProductId(ctx context.Context, in *GetSalesByProductIdRequest, opts ...grpc.CallOption) (*GetSalesByProductIdResponse, error) {
-	out := new(GetSalesByProductIdResponse)
-	err := c.cc.Invoke(ctx, AnalyticsService_GetSalesByProductId_FullMethodName, in, out, opts...)
+func (c *analyticsServiceClient) BringSalesByProductId(ctx context.Context, in *BringSalesByProductIdRequest, opts ...grpc.CallOption) (*BringSalesByProductIdResponse, error) {
+	out := new(BringSalesByProductIdResponse)
+	err := c.cc.Invoke(ctx, AnalyticsService_BringSalesByProductId_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *analyticsServiceClient) GetTopFiveCustomers(ctx context.Context, in *GetTopFiveCustomersRequest, opts ...grpc.CallOption) (*GetTopFiveCustomersResponse, error) {
-	out := new(GetTopFiveCustomersResponse)
-	err := c.cc.Invoke(ctx, AnalyticsService_GetTopFiveCustomers_FullMethodName, in, out, opts...)
+func (c *analyticsServiceClient) ListTopFiveCustomers(ctx context.Context, in *ListTopFiveCustomersRequest, opts ...grpc.CallOption) (*ListTopFiveCustomersResponse, error) {
+	out := new(ListTopFiveCustomersResponse)
+	err := c.cc.Invoke(ctx, AnalyticsService_ListTopFiveCustomers_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -72,9 +72,9 @@ func (c *analyticsServiceClient) GetTopFiveCustomers(ctx context.Context, in *Ge
 // All implementations must embed UnimplementedAnalyticsServiceServer
 // for forward compatibility
 type AnalyticsServiceServer interface {
-	GetTotalSales(context.Context, *GetTotalSalesRequest) (*GetTotalSalesResponse, error)
-	GetSalesByProductId(context.Context, *GetSalesByProductIdRequest) (*GetSalesByProductIdResponse, error)
-	GetTopFiveCustomers(context.Context, *GetTopFiveCustomersRequest) (*GetTopFiveCustomersResponse, error)
+	BringTotalSales(context.Context, *BringTotalSalesRequest) (*BringTotalSalesResponse, error)
+	BringSalesByProductId(context.Context, *BringSalesByProductIdRequest) (*BringSalesByProductIdResponse, error)
+	ListTopFiveCustomers(context.Context, *ListTopFiveCustomersRequest) (*ListTopFiveCustomersResponse, error)
 	mustEmbedUnimplementedAnalyticsServiceServer()
 }
 
@@ -82,14 +82,14 @@ type AnalyticsServiceServer interface {
 type UnimplementedAnalyticsServiceServer struct {
 }
 
-func (UnimplementedAnalyticsServiceServer) GetTotalSales(context.Context, *GetTotalSalesRequest) (*GetTotalSalesResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetTotalSales not implemented")
+func (UnimplementedAnalyticsServiceServer) BringTotalSales(context.Context, *BringTotalSalesRequest) (*BringTotalSalesResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method BringTotalSales not implemented")
 }
-func (UnimplementedAnalyticsServiceServer) GetSalesByProductId(context.Context, *GetSalesByProductIdRequest) (*GetSalesByProductIdResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetSalesByProductId not implemented")
+func (UnimplementedAnalyticsServiceServer) BringSalesByProductId(context.Context, *BringSalesByProductIdRequest) (*BringSalesByProductIdResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method BringSalesByProductId not implemented")
 }
-func (UnimplementedAnalyticsServiceServer) GetTopFiveCustomers(context.Context, *GetTopFiveCustomersRequest) (*GetTopFiveCustomersResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetTopFiveCustomers not implemented")
+func (UnimplementedAnalyticsServiceServer) ListTopFiveCustomers(context.Context, *ListTopFiveCustomersRequest) (*ListTopFiveCustomersResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListTopFiveCustomers not implemented")
 }
 func (UnimplementedAnalyticsServiceServer) mustEmbedUnimplementedAnalyticsServiceServer() {}
 
@@ -104,56 +104,56 @@ func RegisterAnalyticsServiceServer(s grpc.ServiceRegistrar, srv AnalyticsServic
 	s.RegisterService(&AnalyticsService_ServiceDesc, srv)
 }
 
-func _AnalyticsService_GetTotalSales_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetTotalSalesRequest)
+func _AnalyticsService_BringTotalSales_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(BringTotalSalesRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(AnalyticsServiceServer).GetTotalSales(ctx, in)
+		return srv.(AnalyticsServiceServer).BringTotalSales(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: AnalyticsService_GetTotalSales_FullMethodName,
+		FullMethod: AnalyticsService_BringTotalSales_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AnalyticsServiceServer).GetTotalSales(ctx, req.(*GetTotalSalesRequest))
+		return srv.(AnalyticsServiceServer).BringTotalSales(ctx, req.(*BringTotalSalesRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _AnalyticsService_GetSalesByProductId_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetSalesByProductIdRequest)
+func _AnalyticsService_BringSalesByProductId_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(BringSalesByProductIdRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(AnalyticsServiceServer).GetSalesByProductId(ctx, in)
+		return srv.(AnalyticsServiceServer).BringSalesByProductId(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: AnalyticsService_GetSalesByProductId_FullMethodName,
+		FullMethod: AnalyticsService_BringSalesByProductId_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AnalyticsServiceServer).GetSalesByProductId(ctx, req.(*GetSalesByProductIdRequest))
+		return srv.(AnalyticsServiceServer).BringSalesByProductId(ctx, req.(*BringSalesByProductIdRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _AnalyticsService_GetTopFiveCustomers_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetTopFiveCustomersRequest)
+func _AnalyticsService_ListTopFiveCustomers_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListTopFiveCustomersRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(AnalyticsServiceServer).GetTopFiveCustomers(ctx, in)
+		return srv.(AnalyticsServiceServer).ListTopFiveCustomers(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: AnalyticsService_GetTopFiveCustomers_FullMethodName,
+		FullMethod: AnalyticsService_ListTopFiveCustomers_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AnalyticsServiceServer).GetTopFiveCustomers(ctx, req.(*GetTopFiveCustomersRequest))
+		return srv.(AnalyticsServiceServer).ListTopFiveCustomers(ctx, req.(*ListTopFiveCustomersRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -166,16 +166,16 @@ var AnalyticsService_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*AnalyticsServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "GetTotalSales",
-			Handler:    _AnalyticsService_GetTotalSales_Handler,
+			MethodName: "BringTotalSales",
+			Handler:    _AnalyticsService_BringTotalSales_Handler,
 		},
 		{
-			MethodName: "GetSalesByProductId",
-			Handler:    _AnalyticsService_GetSalesByProductId_Handler,
+			MethodName: "BringSalesByProductId",
+			Handler:    _AnalyticsService_BringSalesByProductId_Handler,
 		},
 		{
-			MethodName: "GetTopFiveCustomers",
-			Handler:    _AnalyticsService_GetTopFiveCustomers_Handler,
+			MethodName: "ListTopFiveCustomers",
+			Handler:    _AnalyticsService_ListTopFiveCustomers_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

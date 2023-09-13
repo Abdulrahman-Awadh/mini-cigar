@@ -2,31 +2,31 @@ syntax = "proto3";
 
 option go_package = "../analytics";
 
-message GetTotalSalesRequest {
+message BringTotalSalesRequest {
 
 }
-message GetTotalSalesResponse{
+message BringTotalSalesResponse{
 float total_price=1;
 }
 
-message GetSalesByProductIdRequest{
+message BringSalesByProductIdRequest{
 string product_id=1;
 }
-message GetSalesByProductIdResponse{
+message BringSalesByProductIdResponse{
 float total_price=1;
 }
 
-message GetTopFiveCustomersRequest{
+message ListTopFiveCustomersRequest{
 
 }
-message GetTopFiveCustomersResponse{
+message ListTopFiveCustomersResponse{
 repeated string customer_id=1;
 }
 
 
 
 service AnalyticsService{
-    rpc GetTotalSales (GetTotalSalesRequest) returns (GetTotalSalesResponse);
-    rpc GetSalesByProductId (GetSalesByProductIdRequest) returns (GetSalesByProductIdResponse);
-    rpc GetTopFiveCustomers (GetTopFiveCustomersRequest) returns (GetTopFiveCustomersResponse);
+    rpc BringTotalSales (BringTotalSalesRequest) returns (BringTotalSalesResponse);
+    rpc BringSalesByProductId (BringSalesByProductIdRequest) returns (BringSalesByProductIdResponse);
+    rpc ListTopFiveCustomers (ListTopFiveCustomersRequest) returns (ListTopFiveCustomersResponse);
 }
