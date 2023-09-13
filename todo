@@ -1,0 +1,10 @@
+Todo:
+1- add gitignore for pkg and .idea
+2- follow the naming as cigar
+3- add test to all your code
+4- mock the database
+5- use int instead of float
+6- use seeds for test in database
+7- use specific errors in the services
+8- use page token in getting many record from database
+9- move created at in database and make automatically initialize it
