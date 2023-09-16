@@ -16,5 +16,7 @@ cockroach start \
 mock store
 mockery --dir=packages/transaction/store --name=Store --filename=store_mock.go --output=packages/transaction/store/mock --outpkg=store_mock
 
-mockery --dir=packages/transaction/store --output=/transaction/store/mock --outpkg=store_mock --all
+mock db:
+mockery --dir=packages/database --name=Database --filename=db_mock.go --output=packages/database/mock --outpkg=db_mock
+
 

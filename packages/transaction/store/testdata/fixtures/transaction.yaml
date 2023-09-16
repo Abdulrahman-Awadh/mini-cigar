@@ -1,0 +1,27 @@
+- id: 04e6919b-1cde-429f-a238-9199731f67db
+  created_at: 2023-09-03 19:41:01.210
+  customer_id: c5846d49-b967-4672-b064-4380d691d202
+  product_id: 0d4eaaa2-5444-4b53-aac2-87c32b792790
+  quantity: 1
+  total_price: 20.0
+
+- id: 0e24a184-5bc3-4619-8075-bb1ef4506e1f
+  created_at: 2023-09-03 19:41:01.189
+  customer_id: c5846d49-b967-4672-b064-4380d691d202
+  product_id: 0d4eaaa2-5444-4b53-aac2-87c32b792790
+  quantity: 1
+  total_price: 30.0
+
+- id: 149f5e67-32be-431f-89eb-9b38cdb89734
+  created_at: 2023-09-03 19:41:01.210
+  customer_id: c5846d49-b967-4672-b064-4380d691d202
+  product_id: 0d4eaaa2-5444-4b53-aac2-87c32b792790
+  quantity: 1
+  total_price: 40.0
+
+- id: 1d9a209a-a3c1-4f8a-ab06-ab4b53b3769d
+  created_at: 2023-09-03 19:41:01.210
+  customer_id: c5846d49-b967-4672-b064-4380d691d202
+  product_id: 0d4eaaa2-5444-4b53-aac2-87c32b792790
+  quantity: 1
+  total_price: 50.0

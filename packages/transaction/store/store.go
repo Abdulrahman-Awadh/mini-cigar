@@ -8,7 +8,6 @@ import (
 	"github.com/jackc/pgx/v5"
 	_ "github.com/jackc/pgx/v5"
 	"golang.org/x/net/context"
-	"log"
 	"time"
 )
 
@@ -122,10 +121,9 @@ func (s store) GetTopFiveCustomersId(ctx context.Context) ([]*uuid.UUID, error) 
 }
 
 func (s store) InsertTransaction(ctx context.Context, transaction Transaction) (*Transaction, error) {
-	log.Println("Store: Creating new Transaction...")
-
 	createdAt := time.Now().UTC()
 	id := uuid.New()
+
 	insertSql := `INSERT INTO transaction (
 			id,
 			created_at,
