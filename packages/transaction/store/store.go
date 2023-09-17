@@ -17,15 +17,15 @@ type Transaction struct {
 	CustomerId uuid.UUID
 	ProductId  uuid.UUID
 	Quantity   int32
-	TotalPrice float32
+	TotalPrice int64
 }
 
 type Store interface {
 	InsertTransaction(ctx context.Context, transaction Transaction) (*Transaction, error)
 	GetTransactionById(ctx context.Context, id uuid.UUID) (*Transaction, error)
 	GetAllTransaction(ctx context.Context) ([]*Transaction, error)
-	GetTotalSales(ctx context.Context) (*float32, error)
-	GetSalesByProductId(ctx context.Context, productId uuid.UUID) (*float32, error)
+	GetTotalSales(ctx context.Context) (*int64, error)
+	GetSalesByProductId(ctx context.Context, productId uuid.UUID) (*int64, error)
 	GetTopFiveCustomersId(ctx context.Context) ([]*uuid.UUID, error)
 }
 
@@ -37,8 +37,8 @@ func NewTransactionStore(db database.Database) Store {
 	return &store{DB: db}
 }
 
-func (s store) GetTotalSales(ctx context.Context) (*float32, error) {
-	var totalPrice *float32
+func (s store) GetTotalSales(ctx context.Context) (*int64, error) {
+	var totalPrice *int64
 	q := `
 		SELECT SUM(total_price)
 		FROM transaction
@@ -56,8 +56,8 @@ func (s store) GetTotalSales(ctx context.Context) (*float32, error) {
 	return totalPrice, nil
 }
 
-func (s store) GetSalesByProductId(ctx context.Context, productId uuid.UUID) (*float32, error) {
-	var totalPrice *float32
+func (s store) GetSalesByProductId(ctx context.Context, productId uuid.UUID) (*int64, error) {
+	var totalPrice *int64
 	q := `
 			SELECT SUM(total_price)
 			FROM "transaction"
@@ -77,7 +77,7 @@ func (s store) GetSalesByProductId(ctx context.Context, productId uuid.UUID) (*f
 }
 
 func (s store) GetTopFiveCustomersId(ctx context.Context) ([]*uuid.UUID, error) {
-	var totalPrice float32
+	var totalPrice int64
 	var customerId uuid.UUID
 	q := `
 			select

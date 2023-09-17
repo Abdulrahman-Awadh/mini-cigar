@@ -242,7 +242,7 @@ func (suite *StoreTestSuite) TestTransactionStore_GetTotalSales_SUCCESS() {
 	result, err := suite.store.GetTotalSales(context.Background())
 	suite.NoError(err)
 	suite.NotNil(result)
-	suite.Equal(float32(90), *result)
+	suite.Equal(90, *result)
 }
 
 // =================================

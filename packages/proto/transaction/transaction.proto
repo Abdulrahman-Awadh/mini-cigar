@@ -10,23 +10,23 @@ message Transaction{
   string customer_id =3;
   string product_id=4;
   int32 quantity = 5;
-  float total_price= 6;
+  int64 total_price= 6;
 }
 
 message CreateTransactionRequest{
-string customer_id =1 ;
-string product_id=2 ;
-int32 quantity = 3;
-float total_price= 4;
+  string customer_id =1 ;
+  string product_id=2 ;
+  int32 quantity = 3;
+  int64 total_price= 4;
 }
 
 message CreateTransactionResponse{
-bool is_success = 1;
-string id = 2 ;
+  bool is_success = 1;
+  string id = 2 ;
 }
 
 message GetTransactionByIdRequest{
-string id=1 ;
+  string id=1 ;
 }
 
 message GetTransactionByIdResponse{
@@ -51,14 +51,14 @@ message GetTotalSalesRequest{
 
 }
 message GetTotalSalesResponse{
-  float total_price =1;
+  int64 total_price =1;
 }
 
 message GetSalesByProductIdRequest{
   string product_id = 1;
 }
 message GetSalesByProductIdResponse{
-  float total_price=1;
+  int64 total_price=1;
 }
 
 message GetTopFiveCustomersIdRequest{
