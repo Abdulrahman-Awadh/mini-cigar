@@ -6,7 +6,7 @@ message BringTotalSalesRequest {
 
 }
 message BringTotalSalesResponse{
-    float total_price=1;
+    int64 total_price=1;
 }
 
 message BringSalesByProductIdRequest{

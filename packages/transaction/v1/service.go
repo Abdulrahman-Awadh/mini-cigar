@@ -2,9 +2,9 @@ package v1
 
 import (
 	"context"
-	pb "ecommerece/packages/proto/transaction"
-	"ecommerece/packages/transaction/store"
 	"fmt"
+	pb "github.com/Abdulrahman-Awadh/mini-cigar/packages/proto/transaction"
+	"github.com/Abdulrahman-Awadh/mini-cigar/packages/transaction/store"
 	"github.com/google/uuid"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"

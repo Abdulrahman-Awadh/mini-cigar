@@ -2,12 +2,12 @@ package v1_test
 
 import (
 	"context"
-	pb "ecommerece/packages/proto/transaction"
-	"ecommerece/packages/transaction/store"
-	_ "ecommerece/packages/transaction/store/mock"
-	store_mock "ecommerece/packages/transaction/store/mock"
-	svc "ecommerece/packages/transaction/v1"
 	"errors"
+	pb "github.com/Abdulrahman-Awadh/mini-cigar/packages/proto/transaction"
+	"github.com/Abdulrahman-Awadh/mini-cigar/packages/transaction/store"
+	_ "github.com/Abdulrahman-Awadh/mini-cigar/packages/transaction/store/mock"
+	store_mock "github.com/Abdulrahman-Awadh/mini-cigar/packages/transaction/store/mock"
+	svc "github.com/Abdulrahman-Awadh/mini-cigar/packages/transaction/v1"
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/suite"
 	"google.golang.org/grpc/codes"

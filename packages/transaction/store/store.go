@@ -1,8 +1,8 @@
 package store
 
 import (
-	"ecommerece/packages/database"
 	"errors"
+	"github.com/Abdulrahman-Awadh/mini-cigar/packages/database"
 	_ "github.com/cockroachdb/cockroach-go/v2/crdb/crdbpgxv5"
 	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5"

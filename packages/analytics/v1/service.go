@@ -2,9 +2,9 @@ package v1
 
 import (
 	"context"
-	pb "ecommerece/packages/proto/analytics"
-	transactionPb "ecommerece/packages/proto/transaction"
-	transactionpb "ecommerece/packages/proto/transaction"
+	pb "github.com/Abdulrahman-Awadh/mini-cigar/packages/proto/analytics"
+	transactionPb "github.com/Abdulrahman-Awadh/mini-cigar/packages/proto/transaction"
+	transactionpb "github.com/Abdulrahman-Awadh/mini-cigar/packages/proto/transaction"
 	"github.com/google/uuid"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"

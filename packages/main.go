@@ -2,16 +2,16 @@ package main
 
 import (
 	"context"
-	analyticssvc "ecommerece/packages/analytics/v1"
-	"ecommerece/packages/database"
-	analyticspb "ecommerece/packages/proto/analytics"
-	pb "ecommerece/packages/proto/transaction"
+	analyticssvc "github.com/Abdulrahman-Awadh/mini-cigar/packages/analytics/v1"
+	"github.com/Abdulrahman-Awadh/mini-cigar/packages/database"
+	analyticspb "github.com/Abdulrahman-Awadh/mini-cigar/packages/proto/analytics"
+	pb "github.com/Abdulrahman-Awadh/mini-cigar/packages/proto/transaction"
 	"google.golang.org/grpc"
 	"net"
 
-	"ecommerece/packages/transaction/store"
-	"ecommerece/packages/transaction/v1"
 	"fmt"
+	"github.com/Abdulrahman-Awadh/mini-cigar/packages/transaction/store"
+	"github.com/Abdulrahman-Awadh/mini-cigar/packages/transaction/v1"
 	"log"
 )
 

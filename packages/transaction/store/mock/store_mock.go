@@ -4,8 +4,8 @@ package store_mock
 
 import (
 	context "context"
-	store "ecommerece/packages/transaction/store"
 
+	store "github.com/Abdulrahman-Awadh/mini-cigar/packages/transaction/store"
 	mock "github.com/stretchr/testify/mock"
 
 	uuid "github.com/google/uuid"
@@ -30,6 +30,84 @@ func (_m *Store) GetAllTransaction(ctx context.Context) ([]*store.Transaction, e
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).([]*store.Transaction)
+		}
+	}
+
+	if rf, ok := ret.Get(1).(func(context.Context) error); ok {
+		r1 = rf(ctx)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
+// GetSalesByProductId provides a mock function with given fields: ctx, productId
+func (_m *Store) GetSalesByProductId(ctx context.Context, productId uuid.UUID) (*int64, error) {
+	ret := _m.Called(ctx, productId)
+
+	var r0 *int64
+	var r1 error
+	if rf, ok := ret.Get(0).(func(context.Context, uuid.UUID) (*int64, error)); ok {
+		return rf(ctx, productId)
+	}
+	if rf, ok := ret.Get(0).(func(context.Context, uuid.UUID) *int64); ok {
+		r0 = rf(ctx, productId)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*int64)
+		}
+	}
+
+	if rf, ok := ret.Get(1).(func(context.Context, uuid.UUID) error); ok {
+		r1 = rf(ctx, productId)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
+// GetTopFiveCustomersId provides a mock function with given fields: ctx
+func (_m *Store) GetTopFiveCustomersId(ctx context.Context) ([]*uuid.UUID, error) {
+	ret := _m.Called(ctx)
+
+	var r0 []*uuid.UUID
+	var r1 error
+	if rf, ok := ret.Get(0).(func(context.Context) ([]*uuid.UUID, error)); ok {
+		return rf(ctx)
+	}
+	if rf, ok := ret.Get(0).(func(context.Context) []*uuid.UUID); ok {
+		r0 = rf(ctx)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).([]*uuid.UUID)
+		}
+	}
+
+	if rf, ok := ret.Get(1).(func(context.Context) error); ok {
+		r1 = rf(ctx)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
+// GetTotalSales provides a mock function with given fields: ctx
+func (_m *Store) GetTotalSales(ctx context.Context) (*int64, error) {
+	ret := _m.Called(ctx)
+
+	var r0 *int64
+	var r1 error
+	if rf, ok := ret.Get(0).(func(context.Context) (*int64, error)); ok {
+		return rf(ctx)
+	}
+	if rf, ok := ret.Get(0).(func(context.Context) *int64); ok {
+		r0 = rf(ctx)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*int64)
 		}
 	}
 
